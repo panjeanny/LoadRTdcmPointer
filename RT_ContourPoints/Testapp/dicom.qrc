@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>brain_001.dcm</file>
+    </qresource>
+</RCC>
