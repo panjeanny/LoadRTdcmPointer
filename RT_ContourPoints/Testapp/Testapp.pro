@@ -10,17 +10,17 @@ TEMPLATE = app
 SOURCES += main.cpp \
     dicom.cpp
 
-#INCLUDEPATH += /Users/jeannnypan/Documents/dcmtk-library/include
+INCLUDEPATH += /home/panjeanny/Documents/dcmtk_lib/include
 
-#LIBS += /Users/jeannnypan/Documents/dcmtk-library/lib/libdcmdata.a
-#LIBS += /Users/jeannnypan/Documents/dcmtk-library/lib/liboflog.a
-#LIBS += /Users/jeannnypan/Documents/dcmtk-library/lib/libofstd.a
+LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/libdcmdata.a
+LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/liboflog.a
+LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/libofstd.a
 
-INCLUDEPATH +=/home/jeannypan/Documents/dcmtk_lib/include
+#INCLUDEPATH +=/home/jeannypan/Documents/dcmtk_lib/include
 
-LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/libdcmdata.a
-LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/liboflog.a
-LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/libofstd.a
+#LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/libdcmdata.a
+#LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/liboflog.a
+#LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/libofstd.a
 #LIBS += -ldcmdata\
  #       -loflog\
   #      -lofstd\

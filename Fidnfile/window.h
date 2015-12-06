@@ -16,6 +16,7 @@ class window : public QWidget
 
 public:
     window(QWidget *parent = 0);
+    int DRTContourSeq();
 
 private slots:
     void browse();
@@ -39,6 +40,7 @@ private:
     QPushButton *browseButton;
     QPushButton *findButton;
     QTableWidget *filesTable;
+    QComboBox *textBox;
 
     QDir currentDir;
 

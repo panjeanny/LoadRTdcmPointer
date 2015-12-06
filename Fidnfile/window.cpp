@@ -1,6 +1,17 @@
 #include "window.h"
 
+
+#include"dcmtk/config/osconfig.h"
+#include"dcmtk/dcmdata/dctk.h"
+
+#include"dcmtk/dcmrt/seq/drtcs.h"
+#include "dcmtk/ofstd/ofstdinc.h"
+#include "dcmtk/dcmrt/drtdose.h"
+
+
 #include <QtWidgets>
+
+using namespace std;
 
 window::window(QWidget *parent)
 {
@@ -11,6 +22,7 @@ window::window(QWidget *parent)
     fileComboBox = createComboBox(tr("*"));
     textComboBox = createComboBox();
     directoryComboBox = createComboBox(QDir::currentPath());
+    textBox =createComboBox();
 
     fileLabel = new QLabel(tr("Named:"));
     textLabel = new QLabel(tr("Containing text:"));
@@ -30,6 +42,7 @@ window::window(QWidget *parent)
     mainLayout->addWidget(filesTable, 3, 0, 1, 3);
     mainLayout->addWidget(filesFoundLabel, 4, 0, 1, 2);
     mainLayout->addWidget(findButton, 4, 2);
+    mainLayout->addWidget(textBox,1,1,5,5);
     setLayout(mainLayout);
 
     setWindowTitle(tr("Find Files"));
@@ -78,6 +91,108 @@ void window::find()
         files = findFiles(files, text);
     showFiles(files);
 }
+
+int window::DRTContourSeq()
+{
+
+    QString directory = QFileDialog::getExistingDirectory(this,
+                               tr("Find Files"), QDir::currentPath());
+
+    if (!directory.isEmpty()) {
+        if (directoryComboBox->findText(directory) == -1)
+            directoryComboBox->addItem(directory);
+        directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
+    }
+    QString path = directoryComboBox->currentText();
+
+
+    DcmFileFormat fileformat;
+    OFCondition status =fileformat.loadFile(path.toUtf8().data());
+
+
+
+      if (status.good())
+        {
+            signed long i =0;
+            DcmItem *roiitem = NULL;
+            DcmItem * contouritem = NULL;
+              while(fileformat.getDataset()->findAndGetSequenceItem(DCM_ROIContourSequence,roiitem,i++).good())
+              {
+                  signed long j=0;
+
+                  while(roiitem->findAndGetSequenceItem(DCM_ContourSequence, contouritem, j++).good())
+                  {
+                      Float64 n =0.0;
+                      unsigned long k=0;
+
+                      while (contouritem->findAndGetFloat64(DCM_ContourData, n, k++).good())
+                      {
+
+                             cout<<n<<","<<endl;
+                      }
+
+                      //else cerr << "Error:cannot access Contoritem"<<endl;
+
+                  } //else cerr << "Error:cannot find Contoritem"<<endl;
+
+                  /*roiitem now points to some item in the ContourSequence
+                   * There are differtnt ways to access the conzour Data.
+                   * The following approach is simple but not the most efficienrt one.*/
+
+
+              }
+        }
+
+        return 0;
+
+
+
+
+
+//                  OFString patientName;
+//                  status = rtdose.getPatientName(patientName);
+//                  if (status.good())
+//                  {
+//                    cout << "Patient's Name: " << patientName << endl;
+//                  } else
+//                    cerr << "Error: cannot access Patient's Name (" << status.text() << ")" << endl;
+//                } else
+//                  cerr << "Error: cannot read RT Dose object (" << status.text() << ")" << endl;
+
+
+
+
+//                status = rtContourSeq.read(*fileformat.getMetaInfo());
+//                if(status.good())
+//                {
+//                     DRTContourSequence rtContourSeq;
+
+//                     OFString CurrentSequence;
+//                     status=rtContourSeq.read(fileformat.getMetaInfo());
+//                     if(status.good())
+//                     {
+//                         cout << "Current Item in the Sequence"<<CurrentSequence<<endl;
+//                     } else
+//                         cerr << "Cannot access current Item"<< status.text()<<endl;
+
+
+
+//                } else
+//                    cerr << "Error: cannot read RT DICOM file"<<status.text()<<endl;
+//             } else
+//                cerr << "Error:cannot load DICOM file"<<status.text()<<endl;
+//                cout << "hallo world"<<endl;
+//            return 0;
+
+
+//}
+
+
+}
+
+
+
+
 
 QStringList window::findFiles(const QStringList &files, const QString &text)
 {
