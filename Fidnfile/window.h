@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QDir>
+#include <QTextBrowser>
+#include <QTextEdit>
 
 class QComboBox;
 class QLabel;
@@ -16,11 +18,12 @@ class window : public QWidget
 
 public:
     window(QWidget *parent = 0);
-    int DRTContourSeq();
+    void DRTContourSeq();
 
 private slots:
     void browse();
     void find();
+    void contour();
     void openFileOfItem(int row, int column);
 
 private:
@@ -37,10 +40,13 @@ private:
     QLabel *textLabel;
     QLabel *directoryLabel;
     QLabel *filesFoundLabel;
+    QPushButton *contourButton;
     QPushButton *browseButton;
     QPushButton *findButton;
     QTableWidget *filesTable;
-    QComboBox *textBox;
+    QTextEdit *textBox;
+
+
 
     QDir currentDir;
 

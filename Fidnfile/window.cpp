@@ -10,6 +10,7 @@
 
 
 #include <QtWidgets>
+#include <QTextEdit>
 
 using namespace std;
 
@@ -22,12 +23,13 @@ window::window(QWidget *parent)
     fileComboBox = createComboBox(tr("*"));
     textComboBox = createComboBox();
     directoryComboBox = createComboBox(QDir::currentPath());
-    textBox =createComboBox();
+    textBox = new QTextEdit;
 
     fileLabel = new QLabel(tr("Named:"));
     textLabel = new QLabel(tr("Containing text:"));
     directoryLabel = new QLabel(tr("In directory:"));
     filesFoundLabel = new QLabel;
+    contourButton =createButton(tr("show Contour"),SLOT(contour()));
 
     createFilesTable();
 
@@ -42,8 +44,11 @@ window::window(QWidget *parent)
     mainLayout->addWidget(filesTable, 3, 0, 1, 3);
     mainLayout->addWidget(filesFoundLabel, 4, 0, 1, 2);
     mainLayout->addWidget(findButton, 4, 2);
-    mainLayout->addWidget(textBox,1,1,5,5);
+    mainLayout->addWidget(contourButton,4,3);
+    mainLayout->addWidget(textBox,0, 3);
     setLayout(mainLayout);
+
+
 
     setWindowTitle(tr("Find Files"));
     resize(700, 300);
@@ -90,20 +95,41 @@ void window::find()
     if (!text.isEmpty())
         files = findFiles(files, text);
     showFiles(files);
+
+   // DRTContourSeq();
+
+
 }
 
-int window::DRTContourSeq()
+void window::DRTContourSeq()
 {
 
-    QString directory = QFileDialog::getExistingDirectory(this,
-                               tr("Find Files"), QDir::currentPath());
+}
 
-    if (!directory.isEmpty()) {
-        if (directoryComboBox->findText(directory) == -1)
-            directoryComboBox->addItem(directory);
-        directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
-    }
-    QString path = directoryComboBox->currentText();
+void window::contour()
+{
+
+    int row = filesTable->rowCount();
+    QTableWidgetItem *item = filesTable->item(row, 0);
+
+//    QDesktopServices::openUrl(QUrl::fromLocalFile(currentDir.absoluteFilePath(item->text())));
+
+
+//    QString directory = QFileDialog::getExistingDirectory(this,
+//                               tr("Find Files"), QDir::currentPath());
+
+//    if (!directory.isEmpty()) {
+//        if (directoryComboBox->findText(directory) == -1)
+//            directoryComboBox->addItem(directory);
+//        directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
+//    }
+
+
+    QUrl url =QUrl::fromLocalFile(currentDir.absoluteFilePath(->text()));
+    QString path = url.toString();
+            //QUrl::fromLocalFile(currentDir.absoluteFilePath(item->text()));
+    //QString path = filesTable->currentItem(row,0);
+
 
 
     DcmFileFormat fileformat;
@@ -116,24 +142,27 @@ int window::DRTContourSeq()
             signed long i =0;
             DcmItem *roiitem = NULL;
             DcmItem * contouritem = NULL;
-              while(fileformat.getDataset()->findAndGetSequenceItem(DCM_ROIContourSequence,roiitem,i++).good())
+              if(fileformat.getDataset()->findAndGetSequenceItem(DCM_ROIContourSequence,roiitem,i++).good())
               {
                   signed long j=0;
 
-                  while(roiitem->findAndGetSequenceItem(DCM_ContourSequence, contouritem, j++).good())
+                  if(roiitem->findAndGetSequenceItem(DCM_ContourSequence, contouritem, j++).good())
                   {
                       Float64 n =0.0;
                       unsigned long k=0;
 
-                      while (contouritem->findAndGetFloat64(DCM_ContourData, n, k++).good())
+                      if (contouritem->findAndGetFloat64(DCM_ContourData, n, k++).good())
                       {
 
-                             cout<<n<<","<<endl;
+                          textBox->setText(QString::number(n));
+
                       }
 
-                      //else cerr << "Error:cannot access Contoritem"<<endl;
+                      else textBox->setText("Error:cannot access Contoritem");
 
-                  } //else cerr << "Error:cannot find Contoritem"<<endl;
+
+                  }  else textBox->setText("Error:cannot find Contoritem");
+
 
                   /*roiitem now points to some item in the ContourSequence
                    * There are differtnt ways to access the conzour Data.
@@ -143,7 +172,7 @@ int window::DRTContourSeq()
               }
         }
 
-        return 0;
+        //return 0;
 
 
 
@@ -292,4 +321,5 @@ void window::openFileOfItem(int row, int /* column */)
     QTableWidgetItem *item = filesTable->item(row, 0);
 
     QDesktopServices::openUrl(QUrl::fromLocalFile(currentDir.absoluteFilePath(item->text())));
+
 }

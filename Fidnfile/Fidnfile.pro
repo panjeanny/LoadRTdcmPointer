@@ -14,9 +14,15 @@ SOURCES += main.cpp \
 HEADERS += \
     window.h
 
-INCLUDEPATH += /home/panjeanny/Documents/dcmtk_lib/include
+#INCLUDEPATH += /home/panjeanny/Documents/dcmtk_lib/include
 
-LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/libdcmdata.a
-LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/liboflog.a
-LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/libofstd.a
+#LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/libdcmdata.a
+#LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/liboflog.a
+#LIBS += /home/panjeanny/Documents/dcmtk_lib/lib/libofstd.a
 
+
+INCLUDEPATH += /home/jeannypan/Documents/dcmtk_lib/include
+
+LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/libdcmdata.a
+LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/liboflog.a
+LIBS += /home/jeannypan/Documents/dcmtk_lib/lib/libofstd.a
