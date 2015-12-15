@@ -5,6 +5,8 @@
 #include <QDir>
 #include <QTextBrowser>
 #include <QTextEdit>
+#include <QTreeView>
+#include <QListView>
 
 class QComboBox;
 class QLabel;
@@ -20,11 +22,20 @@ public:
     window(QWidget *parent = 0);
     void DRTContourSeq();
 
+
+
+
 private slots:
     void browse();
     void find();
     void contour();
     void openFileOfItem(int row, int column);
+
+
+
+
+
+
 
 private:
     QStringList findFiles(const QStringList &files, const QString &text);
@@ -45,6 +56,15 @@ private:
     QPushButton *findButton;
     QTableWidget *filesTable;
     QTextEdit *textBox;
+    QComboBox *itemComboBox;
+
+    QTreeView *getPatientsTreeView;
+    QTreeView *getStudiesTreeView;
+    QTreeView *getSeriesTreeView;
+
+
+
+
 
 
 

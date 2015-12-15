@@ -11,6 +11,8 @@
 
 #include <QtWidgets>
 #include <QTextEdit>
+#include <QTreeView>
+#include <QListView>
 
 using namespace std;
 
@@ -25,11 +27,21 @@ window::window(QWidget *parent)
     directoryComboBox = createComboBox(QDir::currentPath());
     textBox = new QTextEdit;
 
+
+    itemComboBox = createComboBox();
+
+
     fileLabel = new QLabel(tr("Named:"));
     textLabel = new QLabel(tr("Containing text:"));
     directoryLabel = new QLabel(tr("In directory:"));
     filesFoundLabel = new QLabel;
     contourButton =createButton(tr("show Contour"),SLOT(contour()));
+
+    getPatientsTreeView = new QTreeWidget;
+    getPatientsTreeView->setColumnWidth(0,400);
+    getPatientsTreeView->setColumnWidth(1,100);
+    getPatientsTreeView->setColumnWidth(2,100);
+
 
     createFilesTable();
 
@@ -47,6 +59,8 @@ window::window(QWidget *parent)
     mainLayout->addWidget(contourButton,4,3);
     mainLayout->addWidget(textBox,0, 3);
     setLayout(mainLayout);
+
+    mainLayout->addWidget(getPatientsTreeView,5,0,1,3);
 
 
 
@@ -96,7 +110,7 @@ void window::find()
         files = findFiles(files, text);
     showFiles(files);
 
-   // DRTContourSeq();
+   DRTContourSeq();
 
 
 }
@@ -109,31 +123,15 @@ void window::DRTContourSeq()
 void window::contour()
 {
 
-    int row = filesTable->rowCount();
-    QTableWidgetItem *item = filesTable->item(row, 0);
 
-//    QDesktopServices::openUrl(QUrl::fromLocalFile(currentDir.absoluteFilePath(item->text())));
+//    QString currentpath = filesTable->currentItem(row, 0);
 
-
-//    QString directory = QFileDialog::getExistingDirectory(this,
-//                               tr("Find Files"), QDir::currentPath());
-
-//    if (!directory.isEmpty()) {
-//        if (directoryComboBox->findText(directory) == -1)
-//            directoryComboBox->addItem(directory);
-//        directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
-//    }
-
-
-    QUrl url =QUrl::fromLocalFile(currentDir.absoluteFilePath(->text()));
-    QString path = url.toString();
-            //QUrl::fromLocalFile(currentDir.absoluteFilePath(item->text()));
-    //QString path = filesTable->currentItem(row,0);
+//    QString path =currentDir & QString::fromUtf16(currentpath);
 
 
 
     DcmFileFormat fileformat;
-    OFCondition status =fileformat.loadFile(path.toUtf8().data());
+    OFCondition status =fileformat.loadFile("/home/jeannypan/Documents/dcmtk_image/LungRT.dcm");
 
 
 
@@ -142,82 +140,50 @@ void window::contour()
             signed long i =0;
             DcmItem *roiitem = NULL;
             DcmItem * contouritem = NULL;
-              if(fileformat.getDataset()->findAndGetSequenceItem(DCM_ROIContourSequence,roiitem,i++).good())
+              while(fileformat.getDataset()->findAndGetSequenceItem(DCM_ROIContourSequence,roiitem,i++).good())
               {
                   signed long j=0;
 
-                  if(roiitem->findAndGetSequenceItem(DCM_ContourSequence, contouritem, j++).good())
+                  while (roiitem->findAndGetSequenceItem(DCM_ContourSequence, contouritem, j++).good())
                   {
                       Float64 n =0.0;
                       unsigned long k=0;
 
-                      if (contouritem->findAndGetFloat64(DCM_ContourData, n, k++).good())
+                      while (contouritem->findAndGetFloat64(DCM_ContourData, n, k++).good())
                       {
 
-                          textBox->setText(QString::number(n));
+                          cout<<n<<","<<endl;
+                          textBox->setPlainText(QString::number(n)+',');
+                          //textBox->setText(QString::number(n)+",");
 
                       }
 
-                      else textBox->setText("Error:cannot access Contoritem");
+
+                  }
 
 
-                  }  else textBox->setText("Error:cannot find Contoritem");
 
+                }
 
                   /*roiitem now points to some item in the ContourSequence
                    * There are differtnt ways to access the conzour Data.
                    * The following approach is simple but not the most efficienrt one.*/
 
 
-              }
-        }
+         }
 
-        //return 0;
-
-
-
-
-
-//                  OFString patientName;
-//                  status = rtdose.getPatientName(patientName);
-//                  if (status.good())
-//                  {
-//                    cout << "Patient's Name: " << patientName << endl;
-//                  } else
-//                    cerr << "Error: cannot access Patient's Name (" << status.text() << ")" << endl;
-//                } else
-//                  cerr << "Error: cannot read RT Dose object (" << status.text() << ")" << endl;
-
-
-
-
-//                status = rtContourSeq.read(*fileformat.getMetaInfo());
-//                if(status.good())
-//                {
-//                     DRTContourSequence rtContourSeq;
-
-//                     OFString CurrentSequence;
-//                     status=rtContourSeq.read(fileformat.getMetaInfo());
-//                     if(status.good())
-//                     {
-//                         cout << "Current Item in the Sequence"<<CurrentSequence<<endl;
-//                     } else
-//                         cerr << "Cannot access current Item"<< status.text()<<endl;
-
-
-
-//                } else
-//                    cerr << "Error: cannot read RT DICOM file"<<status.text()<<endl;
-//             } else
-//                cerr << "Error:cannot load DICOM file"<<status.text()<<endl;
-//                cout << "hallo world"<<endl;
-//            return 0;
-
-
-//}
 
 
 }
+
+
+
+
+
+
+
+
+
 
 
 

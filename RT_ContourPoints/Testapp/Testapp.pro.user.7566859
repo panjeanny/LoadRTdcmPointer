@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.5.1, 2015-12-15T14:52:23. -->
+<!-- Written by QtCreator 3.5.1, 2015-12-06T23:00:18. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{b5580f7d-00f4-4db1-8f92-77df0cc6684b}</value>
+  <value type="QByteArray">{75668599-ab0c-4ee2-b28e-5473b619acb3}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -240,7 +240,7 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Testapp</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Testapp2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/jeannypan/jpan/Github/LoadRTdcmPointer/RT_ContourPoints/Testapp/Testapp.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/panjeanny/Documents/Github/LoadRTdcmPointer/RT_ContourPoints/Testapp/Testapp.pro</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">Testapp.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
